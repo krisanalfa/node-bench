@@ -3,6 +3,7 @@ This repo is intended to measure performance of all popular Node.js web framewor
 
 List of web framework included in test:
 - bare (pure Node.js)
+- [Adonis](https://adonisjs.com/)
 - [Connect](https://github.com/senchalabs/connect)
 - [Express](https://expressjs.com)
 - [Fastify](https://www.fastify.io)
@@ -10,7 +11,9 @@ List of web framework included in test:
 - [Hapi](https://hapijs.com)
 - [Koa](https://koajs.com/)
 - [Moleculer](https://moleculer.services)
+- [Plumier](https://plumierjs.com/docs/overview)
 - [Restify](http://restify.com/)
+- [Sails](https://sailsjs.com/)
 
 List of ORM included in test:
 - [Bookshelf](https://bookshelfjs.org/)
@@ -24,11 +27,13 @@ List of ORM included in test:
 
 Running benchmark
 ```sh
+npx tsc --project .
 node bench.js
 ```
 
 Running individual web framework + specific ORM:
 ```sh
+npx tsc --project .
 # node index.js [web-framework] [orm]
 node index.js bare static # open http://localhost:3000
 ```
@@ -77,7 +82,7 @@ const createApp = fetchAll => {
       .then(data => {
         // If there is no error:
         // 2.1. The status code must be 200.
-        // 2.2. The response must have `Content-Type: application/json` header.
+        // 2.2. The response must have `Content-Type: application/json; charset=utf-8` header.
         // 2.3. The response body must be a valid JSON, which it must be the representation of
         //      anything that fetchAll function returns.
         res.status(200).json(data)
@@ -85,10 +90,10 @@ const createApp = fetchAll => {
       .catch(error => {
         // If there's an error:
         // 2.4. The status code must be 500.
-        // 2.5. The response must have `Content-Type: application/json` header.
+        // 2.5. The response must have `Content-Type: application/json; charset=utf-8` header.
         // 2.6. The response body must be a valid JSON, which it must be the representation of
-        //      the error object thrown.
-        res.status(500).json(error)
+        //      { message: string }
+        res.status(500).json({ message: error.message )
       })
   })
 
@@ -151,6 +156,7 @@ Configuration:
 - Node.js version: v11.13.0
 - OS: Ubuntu 18.04.2 LTS
 - Kernel: 4.15.0-1032-aws
+- Commit ID: [40a1bde](https://github.com/krisanalfa/node-bench/tree/40a1bde1998ac55a7c59d7bb83acc1953b8b254e)
 ```
 ┌──────────────────┬───────────────┬──────────────┬───────────────────┐
 │     (index)      │ Request (rps) │ Latency (ms) │ Throughput (Mbps) │

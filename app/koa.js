@@ -1,7 +1,7 @@
 // @ts-check
 'use strict'
 
-const app = new (require('koa'))()
+const Koa = require('koa')
 
 const c = require('../constanta')
 
@@ -9,17 +9,19 @@ const c = require('../constanta')
  * @param {() => Promise<import("../lib").ICountryCodePair[]>} fetchAll
  */
 const createApp = fetchAll => {
+  const app = new Koa()
+
   app.use(({ res }) => {
     fetchAll()
       .then(result => {
-        res.setHeader('Content-Type', 'application/json')
+        res.setHeader('Content-Type', 'application/json; charset=utf-8')
         res.statusCode = 200
         res.end(JSON.stringify(result))
       })
-      .catch(err => {
-        res.setHeader('Content-Type', 'application/json')
+      .catch(({ message }) => {
+        res.setHeader('Content-Type', 'application/json; charset=utf-8')
         res.statusCode = 500
-        res.end(JSON.stringify(err))
+        res.end(JSON.stringify({ message }))
       })
   })
 

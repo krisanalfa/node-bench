@@ -1,7 +1,7 @@
 // @ts-check
 'use strict'
 
-const ApiService = require('moleculer-web')
+const WebService = require('moleculer-web')
 const { ServiceBroker } = require('moleculer')
 
 const c = require('../constanta')
@@ -17,33 +17,28 @@ const createApp = fetchAll => {
   // Load API Gateway
   broker.createService({
     name: 'http',
-    mixins: [ApiService],
+    mixins: [WebService],
     settings: {
       routes: [{
-        mappingPolicy: 'restrict',
         aliases: {
-          'GET /': 'root.fetchAll'
+          'GET /': 'http.fetchAll'
         }
       }]
-    }
-  })
-
-  broker.createService({
-    name: 'root',
+    },
     actions: {
       async fetchAll (ctx) {
         try {
           const data = await fetchAll()
 
-          ctx.meta.$responseType = 'application/json'
+          ctx.meta.$responseType = 'application/json; charset=utf-8'
           ctx.meta.$statusCode = 200
 
           return data
-        } catch (error) {
-          ctx.meta.$responseType = 'application/json'
+        } catch ({ message }) {
+          ctx.meta.$responseType = 'application/json; charset=utf-8'
           ctx.meta.$statusCode = 500
 
-          return error
+          return { message }
         }
       }
     }

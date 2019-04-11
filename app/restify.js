@@ -1,7 +1,7 @@
 // @ts-check
 'use strict'
 
-const app = require('restify').createServer()
+const { createServer } = require('restify')
 
 const c = require('../constanta')
 
@@ -9,10 +9,12 @@ const c = require('../constanta')
  * @param {() => Promise<import("../lib").ICountryCodePair[]>} fetchAll
  */
 const createApp = fetchAll => {
+  const app = createServer()
+
   app.get('/', (_, res) => {
     fetchAll()
       .then(result => res.json(200, result))
-      .catch(err => res.json(500, err))
+      .catch(({ message }) => res.json(500, { message }))
   })
 
   app.listen(3000, () => process.send && process.send(c['SERVER_EVENT::SERVER_START']))

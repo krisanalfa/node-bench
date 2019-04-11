@@ -4,7 +4,7 @@
 const fs = require('fs')
 const path = require('path')
 const util = require('util')
-const { spawn } = require('child_process')
+const spawn = require('cross-spawn')
 
 const reduce = require('lodash.reduce')
 const autocannon = require('autocannon')
@@ -13,6 +13,7 @@ const flattenDepth = require('lodash.flattendepth')
 
 /** @type {string[]} */
 const servers = [
+  'adonis',
   'connect',
   'express',
   'fastify',
@@ -20,7 +21,9 @@ const servers = [
   'hapi',
   'koa',
   'moleculer',
+  'plumier',
   'restify',
+  'sails',
   'bare'
 ]
 /** @type {string[]} */
@@ -72,8 +75,8 @@ const benchmark = async runnable => new Promise((resolve, reject) => {
   childProcess
     .on('message', async () => {
       try {
-        const totalRun = 6
-        for (let timesOfRun = 1; timesOfRun <= 4; timesOfRun++) {
+        const totalRun = 2
+        for (let timesOfRun = 1; timesOfRun <= totalRun; timesOfRun++) {
           const result = await measurePerf(runnable, timesOfRun, totalRun)
 
           // Delay to run another benchmark
@@ -114,7 +117,7 @@ const measurePerf = async (runnable, timesOfRun, totalRun) => {
     url: 'http://localhost:3000',
     connections: timesOfRun === 1 ? 50 : 100,
     pipelining: timesOfRun === 1 ? 5 : 10,
-    duration: timesOfRun === 1 ? 2.5 : 10
+    duration: timesOfRun === 1 ? 2.5 : 5
   })
 
   const { title, requests, latency, throughput } = result
@@ -162,7 +165,7 @@ const printResult = benchmarkResults => {
       const app = runnable[0].toString()
       const orm = runnable[1].toString()
 
-      console.log('Running %s:%s (%s/%s)...', app, orm, n, total)
+      console.log('Running %s:%s (%s/%s) ...', app, orm, n, total)
 
       const results = await benchmark(runnable)
 

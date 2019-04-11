@@ -1,7 +1,8 @@
 // @ts-check
+'use strict'
 
-const app = require('connect')()
-const http = require('http')
+const connect = require('connect')
+const { createServer } = require('http')
 
 const c = require('../constanta')
 
@@ -9,20 +10,23 @@ const c = require('../constanta')
  * @param {() => Promise<import("../lib").ICountryCodePair[]>} fetchAll
  */
 const createApp = fetchAll => {
+  const app = connect()
+
   app.use('/', (_, res) => {
     fetchAll()
       .then(result => {
-        res.setHeader('Content-Type', 'application/json')
+        res.setHeader('Content-Type', 'application/json; charset=utf-8')
         res.statusCode = 200
         res.end(JSON.stringify(result))
       })
-      .catch(err => {
-        res.setHeader('Content-Type', 'application/json')
+      .catch(({ message }) => {
+        res.setHeader('Content-Type', 'application/json; charset=utf-8')
         res.statusCode = 500
-        res.end(JSON.stringify(err))
+        res.end(JSON.stringify({ message }))
       })
   })
 
-  http.createServer(app).listen(3000, () => process.send && process.send(c['SERVER_EVENT::SERVER_START']))
+  createServer(app)
+    .listen(3000, () => process.send && process.send(c['SERVER_EVENT::SERVER_START']))
 }
 exports.createApp = createApp

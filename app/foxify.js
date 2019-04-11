@@ -1,24 +1,31 @@
 // @ts-check
+'use strict'
 
-const app = new (require('foxify'))()
-
-const { schema } = require('../schema')
+const Foxify = require('foxify')
 
 const c = require('../constanta')
-
-app.disable('x-powered-by')
-app.set('workers', 1)
+const { schema } = require('../schema')
 
 /**
  * @param {() => Promise<import("../lib").ICountryCodePair[]>} fetchAll
  */
 const createApp = fetchAll => {
-  // @ts-ignore - Foxify doesn't support JSONSchema `items` :(
-  app.get('/', { schema }, (_, reply) => {
-    fetchAll()
-      .then(result => reply.status(200).send(result))
-      .catch(err => reply.status(500).send(err))
-  })
+  const app = new Foxify()
+
+  app.disable('x-powered-by')
+  app.set('workers', 1)
+
+  app.get(
+    '/',
+    // @ts-ignore - Foxify doesn't support JSONSchema `items` :(
+    { schema },
+    /** @type {import('foxify').Handler} */
+    (_, reply) => {
+      fetchAll()
+        .then(result => reply.status(200).json(result))
+        .catch(({ message }) => reply.status(500).json({ message }))
+    }
+  )
 
   app.start(() => process.send && process.send(c['SERVER_EVENT::SERVER_START']))
 }
