@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "dependencies": {
+    "bookshelf": "^0.14.2",
+    "connect": "^3.6.6",
+    "express": "^4.16.4",
+    "fastify": "^2.2.0",
+    "foxify": "^0.10.20",
+    "hapi": "^18.1.0",
+    "knex": "^0.16.3",
+    "koa": "^2.7.0",
+    "lodash.flattendepth": "^4.7.0",
+    "lodash.groupby": "^4.6.0",
+    "lodash.reduce": "^4.6.0",
+    "moleculer": "^0.13.8",
+    "moleculer-web": "^0.8.5",
+    "mysql": "^2.16.0",
+    "mysql2": "^1.6.5",
+    "restify": "^8.2.0",
+    "sequelize": "^5.3.1"
+  },
+  "devDependencies": {
+    "@types/connect": "^3.4.32",
+    "autocannon": "^3.2.1",
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0"
+  }
+}
