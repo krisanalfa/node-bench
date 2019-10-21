@@ -13,7 +13,7 @@
     "fastify": "^2.2.0",
     "foxify": "^0.10.20",
     "hapi": "^18.1.0",
-    "knex": "^0.16.3",
+    "knex": "^0.19.5",
     "koa": "^2.7.0",
     "lodash.flattendepth": "^4.7.0",
     "lodash.groupby": "^4.6.0",
